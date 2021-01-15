@@ -1,24 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from './CodeBlock';
 
 function App() {
+  const [readme, setReadme] = React.useState('');
+
+  React.useEffect(() => {
+    fetch('https://raw.githubusercontent.com/tektoncd/catalog/master/task/tkn/0.2/README.md')
+      .then((res) => res.text())
+      .then((data) => setReadme(data));
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ReactMarkdown source={readme} renderers={{ code: CodeBlock }} />
     </div>
   );
 }
